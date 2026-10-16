@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MahaCareer AI - Discover Your Strengths. Explore Your Future.</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav"><div class="wrap navin"><a class="logo" href="#home" data-v="home">MahaCareer <b>AI</b></a>
+<button class="menu" id="menu" aria-label="Menu" aria-expanded="false">Menu</button>
+<nav id="links"><a href="#home" data-v="home">Home</a><a href="#assess" data-v="assess">Career Assessment</a><a href="#explore" data-v="explore">Explore Careers</a><a href="#reports" data-v="reports">My Reports</a><a href="#about" data-v="about">About</a></nav></div></header>
+<div id="toast" role="status" aria-live="polite"></div>
+<main id="main">
+<section id="home" class="view"><div class="hero"><div class="wrap">
+<h1>Discover Your Strengths.<br>Explore Your Future.</h1>
+<p>Answer a few questions about your interests, skills and goals. Get preliminary career suggestions with a clear reason for each, and a 30-day learning plan.</p>
+<a class="btn" href="#assess" data-v="assess">Start Career Assessment</a></div></div>
+<div class="wrap"><h2>How it works</h2><ol class="steps">
+<li><b>Tell us about you</b><span>Education, interests, skills and goals in three short steps.</span></li>
+<li><b>We match, openly</b><span>A transparent rule-based scoring compares your answers with a curated career list. No hidden model.</span></li>
+<li><b>Get your report</b><span>Best match, alternatives, skills to build and a 30-day roadmap.</span></li>
+<li><b>Come back anytime</b><span>Reports are saved on this device's session so you can revisit or delete them.</span></li></ol></div></section>
+
+<section id="assess" class="view" hidden><div class="wrap narrow">
+<div id="formArea"><h2>Career assessment</h2><p class="muted">Fields marked * are required.</p>
+<div class="bar" aria-hidden="true"><i id="barfill"></i></div><p id="stepLabel" class="muted"></p>
+<div id="formError" class="alert" role="alert" hidden></div>
+<form id="form" novalidate>
+<fieldset data-step="1"><legend>About you</legend>
+<label>Full name *<input name="name" maxlength="80" autocomplete="name"></label><span class="err" data-for="name"></span>
+<label>Age range *<select name="age_range"><option value="">Choose...</option><option>Under 15</option><option>15-17</option><option>18-21</option><option>22-25</option><option>26-35</option><option>36+</option></select></label><span class="err" data-for="age_range"></span>
+<label>Current education level *<select name="education_level"><option value="">Choose...</option><option>School (up to 10th)</option><option>Higher secondary (11th-12th)</option><option>Diploma</option><option>Undergraduate</option><option>Postgraduate</option><option>Working professional</option></select></label><span class="err" data-for="education_level"></span>
+<label>Academic stream or field of study *<input name="field_of_study" maxlength="80" placeholder="e.g. Science, Commerce, Computer Engineering"></label><span class="err" data-for="field_of_study"></span>
+<div class="grp"><span class="gl">Favourite subjects</span><div class="chips" data-opts="subjects" data-name="favourite_subjects"></div></div></fieldset>
+<fieldset data-step="2" hidden><legend>Interests and skills</legend>
+<div class="grp"><span class="gl">Interests * (pick at least one)</span><div class="chips" data-opts="interests" data-name="interests"></div><span class="err" data-for="interests"></span></div>
+<div class="grp"><span class="gl">Skills you already have</span><div class="chips" data-opts="skills" data-name="existing_skills"></div></div>
+<div class="grp"><span class="gl">Skills you want to learn</span><div class="chips" data-opts="skills" data-name="desired_skills"></div></div></fieldset>
+<fieldset data-step="3" hidden><legend>Goals</legend>
+<label>Preferred work style *<select name="work_style"><option value="">Choose...</option><option>Independent</option><option>Team-based</option><option>Mix of both</option><option>Remote or flexible</option></select></label><span class="err" data-for="work_style"></span>
+<label>Career goals * (10+ characters)<textarea name="career_goals" rows="3" maxlength="1000" placeholder="What would you like to do or achieve?"></textarea></label><span class="err" data-for="career_goals"></span>
+<div class="grp"><span class="gl">Preferred industries</span><div class="chips" data-opts="industries" data-name="industries"></div></div>
+<label>Experience or projects (optional)<textarea name="experience" rows="3" maxlength="1000"></textarea></label></fieldset>
+<div class="row"><button type="button" class="btn ghost" id="back">Back</button><button type="button" class="btn" id="next">Next</button><button type="submit" class="btn" id="submit" hidden>Analyze my profile</button></div></form></div>
+<div id="loading" hidden><div class="spin"></div><p>Analysing your answers...</p></div></div></section>
+
+<section id="results" class="view" hidden><div class="wrap" id="report"></div></section>
+<section id="explore" class="view" hidden><div class="wrap"><h2>Explore careers</h2><div id="careerList" class="grid"></div></div></section>
+<section id="reports" class="view" hidden><div class="wrap narrow"><h2>My reports</h2><div id="historyList"></div></div></section>
+<section id="about" class="view" hidden><div class="wrap narrow"><h2>About MahaCareer AI</h2>
+<p>MahaCareer AI helps students reflect on their interests and skills and suggests careers to explore. It uses a visible rule-based scoring system, not a trained machine-learning model.</p>
+<h3>Limitations</h3><p>Results are preliminary. They do not predict jobs, salaries, admissions or success. Use them as one input alongside advice from teachers, family and counsellors.</p>
+<h3>Privacy</h3><p>We store your form answers and generated report, linked to a random session cookie in your browser (no account, no email). We keep only what is needed to show your reports. You can delete any report, or all of them, from My Reports. Do not enter phone numbers or addresses.</p>
+<h3>Contact</h3><p>contact@mahacareer.example (replace with your own address)</p></div></section>
+</main>
+<footer><div class="wrap">MahaCareer AI - preliminary guidance only. Your data stays in this app's database.</div></footer>
+<script src="script.js"></script></body></html>

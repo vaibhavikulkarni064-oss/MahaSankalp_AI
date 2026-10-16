@@ -1,0 +1,6 @@
+For starting:
+venv\Scripts\activate
+	o/p:(venv) PS C:\Users\...\Desktop\MahaJalNet>
+for bachend:
+uvicorn backend.main:app --reload
+	o/p:Uvicorn running on http://127.0.0.1:8000

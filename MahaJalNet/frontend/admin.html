@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MahaJalNet - Admin Dashboard</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8fb;
+            color: #222;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .admin-header {
+            background: #075985;
+            color: white;
+            padding: 25px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+        }
+
+        .admin-header p {
+            margin-bottom: 0;
+        }
+
+
+        .home-button {
+            text-decoration: none;
+            background: white;
+            color: #075985;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .home-button:hover {
+            background: #e0f2fe;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================== */
+
+        .admin-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+
+        /* =========================
+           STATISTICS
+        ========================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.10);
+        }
+
+
+        .stat-card h3 {
+            margin-top: 0;
+        }
+
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #075985;
+        }
+
+
+        /* =========================
+           SECTIONS
+        ========================== */
+
+        .dashboard-section {
+            background: white;
+
+            margin-top: 30px;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.10);
+        }
+
+
+        /* =========================
+           RISK
+        ========================== */
+
+        .risk {
+            padding: 8px 14px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            display: inline-block;
+        }
+
+
+        .high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+
+        .moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+
+        .low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+
+        /* =========================
+           REPORT
+        ========================== */
+
+        .report {
+            border-left: 5px solid #075985;
+
+            padding: 18px;
+
+            margin-bottom: 15px;
+
+            background: #f8fafc;
+
+            border-radius: 8px;
+        }
+
+
+        .report:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .report-id {
+            font-weight: bold;
+            color: #075985;
+        }
+
+
+        .report-date {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        .no-reports {
+            text-align: center;
+
+            padding: 30px;
+
+            color: #64748b;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
+        .dashboard-button {
+            background: #075985;
+            color: white;
+
+            border: none;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            margin-right: 8px;
+        }
+
+
+        .dashboard-button:hover {
+            background: #0369a1;
+        }
+
+
+        .danger-button {
+            background: #dc2626;
+        }
+
+
+        .danger-button:hover {
+            background: #b91c1c;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================== */
+
+        .online {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+
+        .coming {
+            color: #ca8a04;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================== */
+
+        .back-button {
+            margin-top: 25px;
+        }
+
+
+        .back-button a {
+            text-decoration: none;
+
+            background: #075985;
+
+            color: white;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            display: inline-block;
+        }
+
+
+        .back-button a:hover {
+            background: #0369a1;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+
+            .admin-header {
+                padding: 20px;
+            }
+
+
+            .admin-container {
+                padding: 20px 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<header class="admin-header">
+
+    <div>
+
+        <h1>
+            🏛️ MahaJalNet Admin Dashboard
+        </h1>
+
+        <p>
+            Municipal Flood Monitoring & Response Center
+        </p>
+
+    </div>
+
+
+    <a
+        class="home-button"
+        href="index.html"
+    >
+        🏠 Home
+    </a>
+
+</header>
+
+
+
+<div class="admin-container">
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================== -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <h3>
+                📢 Total Reports
+            </h3>
+
+            <div
+                class="stat-number"
+                id="totalReports"
+            >
+                0
+            </div>
+
+            <p>
+                Citizen reports received
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>
+                🚨 High Risk Areas
+            </h3>
+
+            <div class="stat-number">
+                2
+            </div>
+
+            <p>
+                Locations requiring attention
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>
+                ⚠️ Active Alerts
+            </h3>
+
+            <div class="stat-number">
+                3
+            </div>
+
+            <p>
+                Current flood warnings
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>
+                🗺️ Monitored Areas
+            </h3>
+
+            <div class="stat-number">
+                6
+            </div>
+
+            <p>
+                Maharashtra locations
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         CURRENT FLOOD RISK
+    ================================================== -->
+
+    <section class="dashboard-section">
+
+        <h2>
+            🌊 Current Flood Risk
+        </h2>
+
+        <p>
+
+            <strong>
+                Mumbai:
+            </strong>
+
+            <span class="risk high">
+                HIGH
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>
+                Pune:
+            </strong>
+
+            <span class="risk moderate">
+                MODERATE
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>
+                Kolhapur:
+            </strong>
+
+            <span class="risk high">
+                HIGH
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>
+                Solapur:
+            </strong>
+
+            <span class="risk low">
+                LOW
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>
+                Nashik:
+            </strong>
+
+            <span class="risk moderate">
+                MODERATE
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <strong>
+                Nagpur:
+            </strong>
+
+            <span class="risk low">
+                LOW
+            </span>
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         CITIZEN REPORTS
+    ================================================== -->
+
+    <section class="dashboard-section">
+
+        <h2>
+            📢 Recent Citizen Reports
+        </h2>
+
+
+        <p>
+            Reports submitted from the MahaJalNet
+            Citizen Flood Report system.
+        </p>
+
+
+        <button
+            class="dashboard-button"
+            onclick="loadReports()"
+        >
+            🔄 Refresh Reports
+        </button>
+
+
+        <button
+            class="dashboard-button danger-button"
+            onclick="clearReports()"
+        >
+            🗑️ Clear Saved Reports
+        </button>
+
+
+        <br><br>
+
+
+        <div id="reportsContainer">
+
+            Loading reports...
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         SYSTEM STATUS
+    ================================================== -->
+
+    <section class="dashboard-section">
+
+        <h2>
+            ⚙️ System Status
+        </h2>
+
+
+        <p>
+            🤖 AI Prediction System:
+            <span class="online">
+                ● Online
+            </span>
+        </p>
+
+
+        <p>
+            🌧️ Weather Monitoring:
+            <span class="online">
+                ● Online
+            </span>
+        </p>
+
+
+        <p>
+            🗺️ Risk Map:
+            <span class="online">
+                ● Online
+            </span>
+        </p>
+
+
+        <p>
+            📢 Citizen Reporting:
+            <span class="online">
+                ● Online
+            </span>
+        </p>
+
+
+        <p>
+            📡 IoT Sensors:
+            <span class="coming">
+                ● Coming Soon
+            </span>
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         PROJECT FLOW
+    ================================================== -->
+
+    <section class="dashboard-section">
+
+        <h2>
+            🔄 MahaJalNet Response Flow
+        </h2>
+
+
+        <p>
+            👤 Citizen submits flood report
+        </p>
+
+
+        <p>
+            ⬇️
+        </p>
+
+
+        <p>
+            📢 Report stored in system
+        </p>
+
+
+        <p>
+            ⬇️
+        </p>
+
+
+        <p>
+            🏛️ Admin reviews report
+        </p>
+
+
+        <p>
+            ⬇️
+        </p>
+
+
+        <p>
+            🚨 Appropriate flood response
+        </p>
+
+    </section>
+
+
+
+    <!-- =================================================
+         BACK
+    ================================================== -->
+
+    <div class="back-button">
+
+        <a href="index.html">
+            ← Back to MahaJalNet
+        </a>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+
+    /* =================================================
+       LOAD REPORTS FROM LOCAL STORAGE
+    ================================================= */
+
+    function loadReports() {
+
+        const container =
+            document.getElementById(
+                "reportsContainer"
+            );
+
+
+        const totalReports =
+            document.getElementById(
+                "totalReports"
+            );
+
+
+        let reports = [];
+
+
+        try {
+
+            reports =
+                JSON.parse(
+                    localStorage.getItem(
+                        "mahaJalNetReports"
+                    )
+                ) || [];
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Unable to read reports:",
+                error
+            );
+
+            reports = [];
+
+        }
+
+
+        /* Update total */
+
+        totalReports.innerText =
+            reports.length;
+
+
+        /* No reports */
+
+        if (reports.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="no-reports">
+
+                    <h3>
+                        📭 No Citizen Reports Yet
+                    </h3>
+
+                    <p>
+                        Reports submitted from the
+                        Citizen Flood Report section
+                        will appear here.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* Newest report first */
+
+        reports.reverse();
+
+
+        let html = "";
+
+
+        reports.forEach(
+            function(report) {
+
+
+                let statusClass =
+                    "moderate";
+
+
+                let statusText =
+                    "UNDER REVIEW";
+
+
+                const problem =
+                    String(
+                        report.problem || ""
+                    ).toLowerCase();
+
+
+                if (
+                    problem.includes("flood") ||
+                    problem.includes("waterlogging")
+                ) {
+
+                    statusClass =
+                        "high";
+
+                    statusText =
+                        "ACTION REQUIRED";
+
+                }
+
+
+                else if (
+                    problem.includes(
+                        "drainage"
+                    )
+                ) {
+
+                    statusClass =
+                        "moderate";
+
+                    statusText =
+                        "UNDER REVIEW";
+
+                }
+
+
+                html += `
+
+                    <div class="report">
+
+                        <div class="report-id">
+
+                            🆔 Report ID:
+                            ${escapeHTML(
+                                report.id || "N/A"
+                            )}
+
+                        </div>
+
+
+                        <br>
+
+
+                        <strong>
+                            📍 Location:
+                        </strong>
+
+                        ${escapeHTML(
+                            report.location || "N/A"
+                        )}
+
+
+                        <br><br>
+
+
+                        <strong>
+                            🌊 Problem:
+                        </strong>
+
+                        ${escapeHTML(
+                            report.problem || "N/A"
+                        )}
+
+
+                        <br><br>
+
+
+                        <strong>
+                            📝 Description:
+                        </strong>
+
+                        <p>
+                            ${escapeHTML(
+                                report.description ||
+                                "No description"
+                            )}
+                        </p>
+
+
+                        <p class="report-date">
+
+                            🕒 Submitted:
+                            ${escapeHTML(
+                                report.date || "N/A"
+                            )}
+
+                        </p>
+
+
+                        <span
+                            class="risk ${statusClass}"
+                        >
+                            ${statusText}
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        container.innerHTML =
+            html;
+
+    }
+
+
+
+    /* =================================================
+       CLEAR REPORTS
+    ================================================= */
+
+    function clearReports() {
+
+        const reports =
+            localStorage.getItem(
+                "mahaJalNetReports"
+            );
+
+
+        if (!reports) {
+
+            alert(
+                "There are no saved reports."
+            );
+
+            return;
+
+        }
+
+
+        const confirmation =
+            confirm(
+                "Are you sure you want to delete all citizen reports?"
+            );
+
+
+        if (!confirmation) {
+
+            return;
+
+        }
+
+
+        localStorage.removeItem(
+            "mahaJalNetReports"
+        );
+
+
+        loadReports();
+
+
+        alert(
+            "All saved citizen reports have been cleared."
+        );
+
+    }
+
+
+
+    /* =================================================
+       ESCAPE HTML
+    ================================================= */
+
+    function escapeHTML(value) {
+
+        return String(value)
+
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+
+            .replace(
+                /</g,
+                "&lt;"
+            )
+
+            .replace(
+                />/g,
+                "&gt;"
+            )
+
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+
+    /* =================================================
+       LOAD WHEN PAGE OPENS
+    ================================================= */
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            loadReports();
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>

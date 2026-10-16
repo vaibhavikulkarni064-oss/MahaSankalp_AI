@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MahaJalNet - Smart Flood Intelligence System</title>
+
+    <!-- Leaflet Map CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8fb;
+            color: #222;
+        }
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        header {
+            background: #075985;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+        }
+
+        .admin-btn {
+            background: white;
+            color: #075985;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .admin-btn:hover {
+            background: #e0f2fe;
+        }
+
+        /* =========================
+           HERO
+        ========================== */
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin: 0 0 10px;
+            color: #075985;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* =========================
+           CONTAINER
+        ========================== */
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        section {
+            scroll-margin-top: 20px;
+        }
+
+        /* =========================
+           FEATURE CARDS
+        ========================== */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .card h3 {
+            color: #075985;
+        }
+
+        /* =========================
+           COMMON BOX
+        ========================== */
+
+        .prediction-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.10);
+            margin-top: 40px;
+        }
+
+        /* =========================
+           INPUTS
+        ========================== */
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #b8c5cf;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            background: white;
+            color: #222;
+            outline: none;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            border: 2px solid #0284c7;
+            box-shadow: 0 0 5px rgba(2, 132, 199, 0.25);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
+        button {
+            background: #075985;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 5px 5px 0;
+        }
+
+        button:hover {
+            background: #0369a1;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* =========================
+           PREDICTION RESULT
+        ========================== */
+
+        #predictionResult {
+            margin-top: 20px;
+            padding: 18px;
+            font-size: 20px;
+            font-weight: bold;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 5px solid #075985;
+        }
+
+        .alert-box {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #e8f5e9;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* =========================
+           WEATHER
+        ========================== */
+
+        .weather-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: #e0f2fe;
+            border-radius: 15px;
+        }
+
+        .weather-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .weather-card {
+            background: white;
+            padding: 25px 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .weather-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .weather-card p {
+            font-size: 23px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* =========================
+           LOCATION
+        ========================== */
+
+        .location-section {
+            margin-top: 40px;
+        }
+
+        .location-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .location-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* =========================
+           MAP
+        ========================== */
+
+        #riskMap {
+            height: 450px;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        /* =========================
+           REPORT RESULT
+        ========================== */
+
+        #reportResult {
+            margin-top: 20px;
+        }
+
+        /* =========================
+           STATUS
+        ========================== */
+
+        .status-text {
+            padding: 10px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            margin-top: 10px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================== */
+
+        footer {
+            text-align: center;
+            background: #075985;
+            color: white;
+            padding: 25px;
+            margin-top: 50px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 900px) {
+
+            .cards,
+            .weather-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero h2 {
+                font-size: 34px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .cards,
+            .weather-cards {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .hero {
+                padding: 40px 15px;
+            }
+
+            .hero h2 {
+                font-size: 28px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .prediction-box,
+            .weather-section {
+                padding: 20px;
+            }
+
+            #riskMap {
+                height: 350px;
+            }
+        }
+            /* =========================================
+   MAHAJALNET PROFESSIONAL UI POLISH
+========================================= */
+
+body {
+    background: linear-gradient(135deg, #f0f9ff, #f8fafc);
+}
+
+/* Header */
+
+header {
+    background: linear-gradient(135deg, #075985, #0369a1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Hero */
+
+.hero {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(224, 242, 254, 0.95),
+            rgba(186, 230, 253, 0.95)
+        );
+    border-bottom: 1px solid #bae6fd;
+}
+
+.hero h2 {
+    color: #075985;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+/* Feature Cards */
+
+.card {
+    border: 1px solid #e0f2fe;
+    transition: all 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(7, 89, 133, 0.15);
+    border-color: #7dd3fc;
+}
+
+.card h3 {
+    margin-top: 5px;
+}
+
+/* Main Sections */
+
+.prediction-box,
+.weather-section,
+.dashboard-section {
+    border: 1px solid #e2e8f0;
+    transition: box-shadow 0.25s ease;
+}
+
+.prediction-box:hover,
+.weather-section:hover {
+    box-shadow: 0 10px 30px rgba(7, 89, 133, 0.12);
+}
+
+/* Inputs */
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    transition: all 0.2s ease;
+}
+
+.input-group input:hover,
+.input-group textarea:hover,
+.input-group select:hover {
+    border-color: #38bdf8;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+/* Buttons */
+
+button {
+    background: linear-gradient(135deg, #075985, #0284c7);
+    box-shadow: 0 4px 10px rgba(7, 89, 133, 0.18);
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #0369a1, #0ea5e9);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 15px rgba(7, 89, 133, 0.25);
+}
+
+/* Weather Cards */
+
+.weather-card {
+    border: 1px solid #e0f2fe;
+    transition: all 0.25s ease;
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(7, 89, 133, 0.15);
+}
+
+/* Location Buttons */
+
+.location-buttons button {
+    min-width: 105px;
+}
+
+/* Map */
+
+#riskMap {
+    border: 3px solid white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Prediction Result */
+
+#predictionResult {
+    border-left: 5px solid #0284c7;
+    background: linear-gradient(
+        135deg,
+        #f0f9ff,
+        #ffffff
+    );
+}
+
+/* Alert */
+
+.alert-box {
+    border: 1px solid #bbf7d0;
+}
+
+/* Footer */
+
+footer {
+    background: linear-gradient(135deg, #075985, #0c4a6e);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .hero h2 {
+        letter-spacing: 0;
+    }
+
+    button {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .location-buttons button {
+        width: auto;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header>
+
+        <div>
+            <h1>🌧️ MahaJalNet</h1>
+            <p>Predict • Prevent • Protect</p>
+        </div>
+
+        <a class="admin-btn" href="admin.html">
+            🛠️ Admin Dashboard
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <h2>Smart Flood Intelligence System</h2>
+
+        <p>
+            AI-powered flood prediction and early warning system
+            for safer cities.
+        </p>
+
+    </section>
+
+
+    <div class="container">
+
+
+        <!-- =========================
+             SYSTEM FEATURES
+        ========================== -->
+
+        <section>
+
+            <h2>🚀 System Features</h2>
+
+            <div class="cards">
+
+                <div class="card">
+                    <h3>🤖 AI Prediction</h3>
+                    <p>
+                        Predict flood risk using environmental data.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>📡 IoT Monitoring</h3>
+                    <p>
+                        Monitor water levels using smart sensors.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>🗺️ Risk Mapping</h3>
+                    <p>
+                        Visualize flood-prone locations.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>🚨 Early Warning</h3>
+                    <p>
+                        Provide early alerts for flood conditions.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             AI FLOOD PREDICTION
+        ========================== -->
+
+        <section class="prediction-box">
+
+            <h2>🤖 AI Flood Risk Prediction</h2>
+
+            <p>
+                Enter environmental conditions to predict flood risk.
+            </p>
+
+
+            <div class="input-group">
+
+                <label for="rainfall">
+                    🌧️ Rainfall (mm)
+                </label>
+
+                <input
+                    type="number"
+                    id="rainfall"
+                    placeholder="Example: 60"
+                    min="0"
+                    max="500"
+                    step="0.1"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="waterLevel">
+                    💧 Water Level (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="waterLevel"
+                    placeholder="Example: 70"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="humidity">
+                    💦 Humidity (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="humidity"
+                    placeholder="Example: 80"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="drainage">
+                    🚧 Drainage Blockage (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="drainage"
+                    placeholder="Example: 50"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button type="button" onclick="predictFlood()">
+                🔍 Predict Flood Risk
+            </button>
+
+
+            <div id="predictionResult">
+                Result will appear here.
+            </div>
+
+
+            <div id="alertBox" class="alert-box">
+                🟢 No active flood warning
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             LIVE WEATHER
+        ========================== -->
+
+        <section class="weather-section">
+
+            <h2>🌧️ Live Weather Monitoring</h2>
+
+            <p>
+                Current weather conditions for flood-risk analysis.
+            </p>
+
+
+            <div class="weather-cards">
+
+                <div class="weather-card">
+
+                    <h3>🌧️ Rainfall</h3>
+
+                    <p id="rainfallValue">
+                        -- mm
+                    </p>
+
+                </div>
+
+
+                <div class="weather-card">
+
+                    <h3>💧 Humidity</h3>
+
+                    <p id="humidityValue">
+                        -- %
+                    </p>
+
+                </div>
+
+
+                <div class="weather-card">
+
+                    <h3>🌡️ Temperature</h3>
+
+                    <p id="temperatureValue">
+                        -- °C
+                    </p>
+
+                </div>
+
+
+                <div class="weather-card">
+
+                    <h3>⚠️ Weather Status</h3>
+
+                    <p id="weatherStatus">
+                        Checking...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+            <button type="button" onclick="loadWeather()">
+                🔄 Refresh Weather
+            </button>
+
+
+            <button type="button" onclick="useWeatherForPrediction()">
+                🤖 Use Weather for AI Prediction
+            </button>
+
+        </section>
+
+
+        <!-- =========================
+             LOCATION FLOOD RISK
+        ========================== -->
+
+        <section class="location-section">
+
+            <h2>📍 Location Flood Risk</h2>
+
+            <p>
+                Select a location to view the prototype flood-risk prediction.
+            </p>
+
+
+            <div class="location-buttons">
+
+                <button type="button" onclick="checkLocation('Mumbai')">
+                    Mumbai
+                </button>
+
+                <button type="button" onclick="checkLocation('Pune')">
+                    Pune
+                </button>
+
+                <button type="button" onclick="checkLocation('Kolhapur')">
+                    Kolhapur
+                </button>
+
+                <button type="button" onclick="checkLocation('Solapur')">
+                    Solapur
+                </button>
+
+                <button type="button" onclick="checkLocation('Nashik')">
+                    Nashik
+                </button>
+
+                <button type="button" onclick="checkLocation('Nagpur')">
+                    Nagpur
+                </button>
+
+            </div>
+
+
+            <div
+                id="locationResult"
+                class="location-result"
+            >
+                Select a location.
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RISK MAP
+        ========================== -->
+
+        <section style="margin-top: 40px;">
+
+            <h2>🗺️ Maharashtra Flood Risk Map</h2>
+
+            <p>
+                Prototype visualization of flood-risk locations.
+            </p>
+
+            <div id="riskMap"></div>
+
+        </section>
+
+
+        <!-- =========================
+             CITIZEN FLOOD REPORT
+        ========================== -->
+
+        <section class="prediction-box">
+
+            <h2>📢 Citizen Flood Report</h2>
+
+            <p>
+                Report flooding, waterlogging or drainage problems
+                in your area.
+            </p>
+
+
+            <div class="input-group">
+
+                <label for="reportLocation">
+                    📍 Location
+                </label>
+
+                <input
+                    type="text"
+                    id="reportLocation"
+                    placeholder="Enter location"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="problemType">
+                    🌊 Problem Type
+                </label>
+
+                <select id="problemType">
+
+                    <option value="Waterlogging">
+                        Waterlogging
+                    </option>
+
+                    <option value="Flood">
+                        Flood
+                    </option>
+
+                    <option value="Drainage Blockage">
+                        Drainage Blockage
+                    </option>
+
+                    <option value="Heavy Rainfall">
+                        Heavy Rainfall
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="reportDescription">
+                    📝 Description
+                </label>
+
+                <textarea
+                    id="reportDescription"
+                    rows="4"
+                    placeholder="Describe the problem..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="submitReport()"
+            >
+                🚨 Submit Flood Report
+            </button>
+
+
+            <div id="reportResult"></div>
+
+        </section>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <p>
+            🌧️ MahaJalNet | Predict • Prevent • Protect
+        </p>
+
+        <p>
+            Smart Flood Intelligence System
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         LEAFLET JS
+    ========================== -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <script>
+
+        /* =====================================================
+           AI FLOOD PREDICTION
+        ===================================================== */
+
+        async function predictFlood() {
+
+            const rainfall =
+                parseFloat(
+                    document.getElementById("rainfall").value
+                );
+
+            const waterLevel =
+                parseFloat(
+                    document.getElementById("waterLevel").value
+                );
+
+            const humidity =
+                parseFloat(
+                    document.getElementById("humidity").value
+                );
+
+            const drainage =
+                parseFloat(
+                    document.getElementById("drainage").value
+                );
+
+            const result =
+                document.getElementById("predictionResult");
+
+            const alertBox =
+                document.getElementById("alertBox");
+
+
+            /* Validate inputs */
+
+            if (
+                isNaN(rainfall) ||
+                isNaN(waterLevel) ||
+                isNaN(humidity) ||
+                isNaN(drainage)
+            ) {
+
+                result.innerText =
+                    "⚠️ Please enter all values.";
+
+                return;
+            }
+
+
+            result.innerText =
+                "⏳ Predicting flood risk...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:8003/predict",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                rainfall: rainfall,
+
+                                water_level: waterLevel,
+
+                                humidity: humidity,
+
+                                drainage_blockage: drainage
+
+                            })
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Backend returned an error."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                result.innerHTML =
+
+                    "🌊 Flood Risk: " +
+
+                    "<strong>" +
+                    data.predicted_flood_risk +
+                    "</strong>" +
+
+                    "<br><br>" +
+
+                    "📊 Confidence: " +
+                    data.confidence +
+                    "%";
+
+
+                /* Risk Alert */
+
+                if (
+                    data.predicted_flood_risk ===
+                    "CRITICAL"
+                ) {
+
+                    alertBox.innerHTML =
+                        "🚨 CRITICAL FLOOD WARNING — Immediate action required!";
+
+                    alertBox.style.background =
+                        "#ffdddd";
+
+                }
+
+                else if (
+                    data.predicted_flood_risk ===
+                    "HIGH"
+                ) {
+
+                    alertBox.innerHTML =
+                        "⚠️ HIGH FLOOD RISK — Stay alert and avoid low-lying areas.";
+
+                    alertBox.style.background =
+                        "#fff3cd";
+
+                }
+
+                else if (
+                    data.predicted_flood_risk ===
+                    "MODERATE"
+                ) {
+
+                    alertBox.innerHTML =
+                        "🟡 MODERATE FLOOD RISK — Monitor weather conditions.";
+
+                    alertBox.style.background =
+                        "#fff8d6";
+
+                }
+
+                else {
+
+                    alertBox.innerHTML =
+                        "🟢 LOW FLOOD RISK — No immediate warning.";
+
+                    alertBox.style.background =
+                        "#e8f5e9";
+
+                }
+
+            }
+
+            catch (error) {
+
+                result.innerHTML =
+                    "❌ Backend connection error.<br>" +
+                    "Please start FastAPI using:<br><br>" +
+                    "<code>uvicorn backend.main:app --reload</code>";
+
+                console.error(error);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           LIVE WEATHER
+        ===================================================== */
+
+        async function loadWeather() {
+
+            const rainfall =
+                document.getElementById(
+                    "rainfallValue"
+                );
+
+            const humidity =
+                document.getElementById(
+                    "humidityValue"
+                );
+
+            const temperature =
+                document.getElementById(
+                    "temperatureValue"
+                );
+
+            const status =
+                document.getElementById(
+                    "weatherStatus"
+                );
+
+
+            status.innerText =
+                "Loading...";
+
+
+            try {
+
+                /* Solapur coordinates */
+
+                const latitude =
+                    17.6599;
+
+                const longitude =
+                    75.9064;
+
+
+                const url =
+                    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,rain,precipitation&timezone=Asia%2FKolkata`;
+
+
+                const response =
+                    await fetch(url);
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Weather data unavailable"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const current =
+                    data.current;
+
+
+                rainfall.innerText =
+                    `${current.rain} mm`;
+
+                humidity.innerText =
+                    `${current.relative_humidity_2m} %`;
+
+                temperature.innerText =
+                    `${current.temperature_2m} °C`;
+
+
+                if (current.rain >= 10) {
+
+                    status.innerText =
+                        "🌧️ Heavy Rain";
+
+                }
+
+                else if (current.rain > 0) {
+
+                    status.innerText =
+                        "🌦️ Rain";
+
+                }
+
+                else {
+
+                    status.innerText =
+                        "☀️ No Rain";
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                rainfall.innerText =
+                    "-- mm";
+
+                humidity.innerText =
+                    "-- %";
+
+                temperature.innerText =
+                    "-- °C";
+
+                status.innerText =
+                    "⚠️ Unable to load";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           WEATHER → AI PREDICTION
+        ===================================================== */
+
+        function useWeatherForPrediction() {
+
+            const rainfall =
+                parseFloat(
+                    document.getElementById(
+                        "rainfallValue"
+                    ).innerText
+                );
+
+
+            const humidity =
+                parseFloat(
+                    document.getElementById(
+                        "humidityValue"
+                    ).innerText
+                );
+
+
+            if (
+                isNaN(rainfall) ||
+                isNaN(humidity)
+            ) {
+
+                alert(
+                    "Please load weather data first."
+                );
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "rainfall"
+            ).value = rainfall;
+
+
+            document.getElementById(
+                "humidity"
+            ).value = humidity;
+
+
+            /*
+                Prototype assumptions.
+                Later these values can come
+                from IoT sensors.
+            */
+
+            document.getElementById(
+                "waterLevel"
+            ).value = 50;
+
+
+            document.getElementById(
+                "drainage"
+            ).value = 30;
+
+
+            document.querySelector(
+                ".prediction-box"
+            ).scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /* =====================================================
+           LOCATION PREDICTION
+        ===================================================== */
+
+        const locations = {
+
+            Mumbai: {
+                rainfall: 70,
+                water: 75,
+                humidity: 82,
+                drainage: 60
+            },
+
+            Pune: {
+                rainfall: 45,
+                water: 55,
+                humidity: 70,
+                drainage: 40
+            },
+
+            Kolhapur: {
+                rainfall: 65,
+                water: 70,
+                humidity: 80,
+                drainage: 55
+            },
+
+            Solapur: {
+                rainfall: 20,
+                water: 30,
+                humidity: 55,
+                drainage: 25
+            },
+
+            Nashik: {
+                rainfall: 40,
+                water: 50,
+                humidity: 68,
+                drainage: 35
+            },
+
+            Nagpur: {
+                rainfall: 25,
+                water: 35,
+                humidity: 60,
+                drainage: 30
+            }
+
+        };
+
+
+        async function checkLocation(location) {
+
+            const data =
+                locations[location];
+
+            const result =
+                document.getElementById(
+                    "locationResult"
+                );
+
+
+            result.innerText =
+                "⏳ Checking flood risk...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:8003/predict",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                rainfall:
+                                    data.rainfall,
+
+                                water_level:
+                                    data.water,
+
+                                humidity:
+                                    data.humidity,
+
+                                drainage_blockage:
+                                    data.drainage
+
+                            })
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Prediction failed"
+                    );
+
+                }
+
+
+                const prediction =
+                    await response.json();
+
+
+                result.innerHTML = `
+
+                    <h3>📍 ${location}</h3>
+
+                    <p>
+                        🌧️ Rainfall:
+                        ${data.rainfall} mm
+                    </p>
+
+                    <p>
+                        💧 Water Level:
+                        ${data.water}%
+                    </p>
+
+                    <p>
+                        💦 Humidity:
+                        ${data.humidity}%
+                    </p>
+
+                    <p>
+                        🚧 Drainage Blockage:
+                        ${data.drainage}%
+                    </p>
+
+                    <h3>
+                        🌊 Flood Risk:
+                        ${prediction.predicted_flood_risk}
+                    </h3>
+
+                    <p>
+                        📊 Confidence:
+                        ${prediction.confidence}%
+                    </p>
+
+                `;
+
+            }
+
+            catch (error) {
+
+                result.innerText =
+                    "❌ Backend connection error. " +
+                    "Please start FastAPI.";
+
+                console.error(error);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           RISK MAP
+        ===================================================== */
+
+        const map =
+            L.map("riskMap").setView(
+                [19.7515, 75.7139],
+                7
+            );
+
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution:
+                    "&copy; OpenStreetMap contributors"
+            }
+        ).addTo(map);
+
+
+        const riskLocations = [
+
+            {
+                name: "Mumbai",
+                coordinates: [19.0760, 72.8777],
+                risk: "HIGH"
+            },
+
+            {
+                name: "Pune",
+                coordinates: [18.5204, 73.8567],
+                risk: "MODERATE"
+            },
+
+            {
+                name: "Kolhapur",
+                coordinates: [16.7050, 74.2433],
+                risk: "HIGH"
+            },
+
+            {
+                name: "Solapur",
+                coordinates: [17.6599, 75.9064],
+                risk: "LOW"
+            },
+
+            {
+                name: "Nashik",
+                coordinates: [19.9975, 73.7898],
+                risk: "MODERATE"
+            },
+
+            {
+                name: "Nagpur",
+                coordinates: [21.1458, 79.0882],
+                risk: "LOW"
+            }
+
+        ];
+
+
+        riskLocations.forEach(
+            function(location) {
+
+                L.marker(
+                    location.coordinates
+                )
+                .addTo(map)
+                .bindPopup(`
+
+                    <strong>
+                        ${location.name}
+                    </strong>
+
+                    <br>
+
+                    Flood Risk:
+                    ${location.risk}
+
+                `);
+
+            }
+        );
+
+
+        /* =====================================================
+           CITIZEN FLOOD REPORT
+        ===================================================== */
+
+        function submitReport() {
+
+            const locationInput =
+                document.getElementById(
+                    "reportLocation"
+                );
+
+            const problemInput =
+                document.getElementById(
+                    "problemType"
+                );
+
+            const descriptionInput =
+                document.getElementById(
+                    "reportDescription"
+                );
+
+            const result =
+                document.getElementById(
+                    "reportResult"
+                );
+
+
+            const location =
+                locationInput.value.trim();
+
+            const problem =
+                problemInput.value;
+
+            const description =
+                descriptionInput.value.trim();
+
+
+            /* Validation */
+
+            if (location === "") {
+
+                result.innerHTML =
+                    "⚠️ Please enter your location.";
+
+                return;
+
+            }
+
+
+            if (description === "") {
+
+                result.innerHTML =
+                    "⚠️ Please enter a description.";
+
+                return;
+
+            }
+
+
+            /* Create Report ID */
+
+            const reportId =
+                "MJN-" + Date.now();
+
+
+            const newReport = {
+
+                id: reportId,
+
+                location: location,
+
+                problem: problem,
+
+                description: description,
+
+                date:
+                    new Date().toLocaleString()
+
+            };
+
+
+            /* Get old reports */
+
+            let reports =
+                JSON.parse(
+                    localStorage.getItem(
+                        "mahaJalNetReports"
+                    )
+                ) || [];
+
+
+            /* Add new report */
+
+            reports.push(newReport);
+
+
+            /* Save */
+
+            localStorage.setItem(
+                "mahaJalNetReports",
+                JSON.stringify(reports)
+            );
+
+
+            /* Show success */
+
+            result.innerHTML = `
+
+                <div style="
+                    background:#e8f5e9;
+                    padding:20px;
+                    border-radius:12px;
+                    color:#166534;
+                    margin-top:15px;
+                ">
+
+                    <h3>
+                        ✅ Report Submitted Successfully!
+                    </h3>
+
+                    <p>
+                        <strong>
+                            🆔 Report ID:
+                        </strong>
+
+                        ${reportId}
+                    </p>
+
+                    <p>
+                        <strong>
+                            📍 Location:
+                        </strong>
+
+                        ${escapeHTML(location)}
+                    </p>
+
+                    <p>
+                        <strong>
+                            🌊 Problem:
+                        </strong>
+
+                        ${escapeHTML(problem)}
+                    </p>
+
+                    <p>
+                        <strong>
+                            📝 Description:
+                        </strong>
+
+                        ${escapeHTML(description)}
+                    </p>
+
+                    <p>
+                        🚨 Your report has been
+                        recorded for further action.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            /* Clear form */
+
+            locationInput.value = "";
+
+            descriptionInput.value = "";
+
+        }
+
+
+        /* =====================================================
+           HTML SAFETY
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+            return value
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =====================================================
+           LOAD WEATHER WHEN PAGE OPENS
+        ===================================================== */
+
+        window.addEventListener(
+            "load",
+            function() {
+
+                loadWeather();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

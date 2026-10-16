@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeevanSetu AI | Admin Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #07151a;
+            color: #eaffff;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 22px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(5,20,25,0.9);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #38e8c5;
+        }
+
+        .status {
+            padding: 9px 16px;
+            border-radius: 30px;
+            background: rgba(56,232,197,0.1);
+            border: 1px solid rgba(56,232,197,0.3);
+            color: #38e8c5;
+            font-size: 13px;
+        }
+
+        .container {
+            width: 88%;
+            max-width: 1400px;
+            margin: 40px auto;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .heading h1 {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+
+        .heading p {
+            color: #8da8ad;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            border-radius: 20px;
+            background: linear-gradient(
+                145deg,
+                rgba(255,255,255,0.08),
+                rgba(255,255,255,0.025)
+            );
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #8da8ad;
+            font-size: 14px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 22px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            font-size: 13px;
+        }
+
+        th {
+            color: #7ff5df;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: #c8d9dc;
+        }
+
+        .priority {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .critical {
+            background: rgba(255,70,70,0.15);
+            color: #ff7777;
+        }
+
+        .high {
+            background: rgba(255,170,50,0.15);
+            color: #ffbd5c;
+        }
+
+        .medium {
+            background: rgba(255,220,70,0.15);
+            color: #ffe16a;
+        }
+
+        .low {
+            background: rgba(56,232,197,0.12);
+            color: #52e6ca;
+        }
+
+        .flow {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .flow-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .flow-number {
+            min-width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(56,232,197,0.12);
+            color: #38e8c5;
+            font-weight: 700;
+        }
+
+        .flow-item h4 {
+            margin-bottom: 4px;
+        }
+
+        .flow-item p {
+            color: #81999e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: #71898e;
+        }
+
+        .refresh {
+            margin-top: 22px;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #38e8c5;
+            color: #041412;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .refresh:hover {
+            opacity: 0.85;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #627b80;
+            font-size: 13px;
+        }
+
+        @media (max-width: 950px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .heading h1 {
+                font-size: 28px;
+            }
+
+            header {
+                padding: 18px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        Jeevan<span>Setu</span> AI
+    </div>
+
+    <div class="status">
+        ● System Online
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="heading">
+        <h1>Healthcare Command Center</h1>
+        <p>AI-assisted emergency case monitoring and priority management</p>
+    </div>
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">🏥</div>
+            <h3 id="totalCases">0</h3>
+            <p>Total Emergency Cases</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🚨</div>
+            <h3 id="criticalCases">0</h3>
+            <p>Critical Cases</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <h3 id="highCases">0</h3>
+            <p>High Priority Cases</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🧠</div>
+            <h3 id="avgScore">0</h3>
+            <p>Average AI Score</p>
+        </div>
+
+    </section>
+
+    <section class="dashboard-grid">
+
+        <!-- CASE TABLE -->
+
+        <div class="panel">
+
+            <h2>🚑 Emergency Cases</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Patient</th>
+                            <th>Emergency</th>
+                            <th>Priority</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="caseTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <button class="refresh" onclick="loadCases()">
+                ↻ Refresh Dashboard
+            </button>
+
+        </div>
+
+        <!-- SYSTEM FLOW -->
+
+        <div class="panel">
+
+            <h2>⚡ Response Flow</h2>
+
+            <div class="flow">
+
+                <div class="flow-item">
+                    <div class="flow-number">1</div>
+                    <div>
+                        <h4>Emergency Report</h4>
+                        <p>Citizen or hospital submits emergency information.</p>
+                    </div>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">2</div>
+                    <div>
+                        <h4>AI Assessment</h4>
+                        <p>System evaluates emergency indicators and patient condition.</p>
+                    </div>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">3</div>
+                    <div>
+                        <h4>Priority Assignment</h4>
+                        <p>Case receives a Low, Medium, High or Critical priority.</p>
+                    </div>
+                </div>
+
+                <div class="flow-item">
+                    <div class="flow-number">4</div>
+                    <div>
+                        <h4>Emergency Coordination</h4>
+                        <p>Priority information can support faster response coordination.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    JeevanSetu AI © 2026 · Smart Healthcare Emergency Coordination Prototype
+</footer>
+
+
+<script>
+
+function loadCases() {
+
+    const cases =
+        JSON.parse(localStorage.getItem("jeevanSetuReports")) || [];
+
+    document.getElementById("totalCases").textContent =
+        cases.length;
+
+    const critical =
+        cases.filter(c =>
+            String(c.priority).toUpperCase() === "CRITICAL"
+        ).length;
+
+    const high =
+        cases.filter(c =>
+            String(c.priority).toUpperCase() === "HIGH"
+        ).length;
+
+    document.getElementById("criticalCases").textContent =
+        critical;
+
+    document.getElementById("highCases").textContent =
+        high;
+
+    let totalScore = 0;
+
+    cases.forEach(c => {
+        totalScore += Number(c.score) || 0;
+    });
+
+    const average =
+        cases.length > 0
+            ? Math.round(totalScore / cases.length)
+            : 0;
+
+    document.getElementById("avgScore").textContent =
+        average;
+
+    const table =
+        document.getElementById("caseTable");
+
+    table.innerHTML = "";
+
+    if (cases.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    <div class="empty">
+                        No emergency cases registered yet.
+                        <br><br>
+                        Submit a case from the main dashboard.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    cases.slice().reverse().forEach(c => {
+
+        const priority =
+            String(c.priority || "LOW").toUpperCase();
+
+        const priorityClass =
+            priority.toLowerCase();
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${c.case_id || "JSA-XXXX"}</td>
+
+            <td>${c.patient_name || "Unknown"}</td>
+
+            <td>${c.emergency_type || "Other"}</td>
+
+            <td>
+                <span class="priority ${priorityClass}">
+                    ${priority}
+                </span>
+            </td>
+
+            <td>${c.score || 0}/100</td>
+        `;
+
+        table.appendChild(row);
+
+    });
+}
+
+loadCases();
+
+</script>
+
+</body>
+</html>

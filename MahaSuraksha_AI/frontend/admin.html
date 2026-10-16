@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MahaSuraksha AI - Admin Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            background: #f4f7fb;
+        }
+
+        .dashboard {
+            padding: 45px 7%;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .dashboard-header h1 {
+            color: #0b1f3a;
+        }
+
+        .dashboard-header p {
+            color: #64748b;
+        }
+
+        .back-btn,
+        .refresh-btn,
+        .clear-btn {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            background: #0b1f3a;
+            color: white;
+        }
+
+        .refresh-btn {
+            background: #0284c7;
+            color: white;
+        }
+
+        .clear-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card h3 {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0b1f3a;
+            margin-top: 8px;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .dashboard-card h2 {
+            color: #0b1f3a;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        td {
+            color: #475569;
+        }
+
+        .risk {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .critical {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .high {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+        .medium {
+            background: #fef3c7;
+            color: #a16207;
+        }
+
+        .low {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #64748b;
+        }
+
+        .status-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .status-item {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .status-item strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .online {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .status-box {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        🛡️ MahaSuraksha AI
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="admin.html">Dashboard</a>
+    </nav>
+
+</header>
+
+
+<main class="dashboard">
+
+    <div class="dashboard-header">
+
+        <div>
+            <h1>Police / Admin Dashboard</h1>
+            <p>
+                Cyber-Fraud Intelligence and Case Monitoring
+            </p>
+        </div>
+
+        <a href="index.html" class="back-btn">
+            ← Back to Home
+        </a>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <h3>Total Cases</h3>
+            <div class="number" id="totalCases">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Critical Cases</h3>
+            <div class="number" id="criticalCases">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>High Risk Cases</h3>
+            <div class="number" id="highCases">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Amount Lost</h3>
+            <div class="number" id="totalAmount">₹0</div>
+        </div>
+
+    </section>
+
+
+    <!-- CASE REPORTS -->
+
+    <section class="dashboard-card">
+
+        <h2>📋 Reported Cyber-Fraud Cases</h2>
+
+        <div style="margin-bottom:20px;">
+
+            <button
+                class="refresh-btn"
+                onclick="loadReports()">
+                🔄 Refresh Reports
+            </button>
+
+            <button
+                class="clear-btn"
+                onclick="clearReports()">
+                🗑 Clear Reports
+            </button>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Case ID</th>
+                        <th>Victim</th>
+                        <th>Fraud Type</th>
+                        <th>Amount</th>
+                        <th>Risk</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="reportsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- SYSTEM STATUS -->
+
+    <section class="dashboard-card">
+
+        <h2>⚙️ System Status</h2>
+
+        <div class="status-box">
+
+            <div class="status-item">
+
+                <strong>AI Risk Engine</strong>
+
+                <span class="online">
+                    ● Operational
+                </span>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <strong>FastAPI Backend</strong>
+
+                <span class="online">
+                    ● Running
+                </span>
+
+            </div>
+
+
+            <div class="status-item">
+
+                <strong>Case Storage</strong>
+
+                <span class="online">
+                    ● Local Storage Active
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESPONSE FLOW -->
+
+    <section class="dashboard-card">
+
+        <h2>🚨 Response Flow</h2>
+
+        <p>
+            Citizen Report → AI Risk Analysis →
+            Case ID Generation → Police Review →
+            Investigation & Response
+        </p>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <h3>🛡️ MahaSuraksha AI</h3>
+
+    <p>
+        Cyber-Fraud Intelligence & Public Safety Platform
+    </p>
+
+    <p>
+        Innovation Challenge Prototype
+    </p>
+
+</footer>
+
+
+<script>
+
+function loadReports() {
+
+    const reports =
+        JSON.parse(
+            localStorage.getItem("mahaSurakshaReports")
+        ) || [];
+
+
+    document.getElementById("totalCases").textContent =
+        reports.length;
+
+
+    let critical = 0;
+    let high = 0;
+    let totalAmount = 0;
+
+
+    reports.forEach(report => {
+
+        if (report.risk_level === "CRITICAL") {
+            critical++;
+        }
+
+        if (report.risk_level === "HIGH") {
+            high++;
+        }
+
+        totalAmount += Number(report.amount) || 0;
+
+    });
+
+
+    document.getElementById("criticalCases").textContent =
+        critical;
+
+
+    document.getElementById("highCases").textContent =
+        high;
+
+
+    document.getElementById("totalAmount").textContent =
+        "₹" + totalAmount.toLocaleString("en-IN");
+
+
+    const table =
+        document.getElementById("reportsTable");
+
+
+    table.innerHTML = "";
+
+
+    if (reports.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    No cyber-fraud reports available.
+                    Reports submitted from the home page
+                    will appear here.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    reports
+        .slice()
+        .reverse()
+        .forEach(report => {
+
+            let riskClass =
+                report.risk_level.toLowerCase();
+
+
+            const row = document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>${report.case_id}</td>
+
+                <td>${report.victim_name}</td>
+
+                <td>${report.fraud_type}</td>
+
+                <td>
+                    ₹${Number(report.amount).toLocaleString("en-IN")}
+                </td>
+
+                <td>
+                    <span class="risk ${riskClass}">
+                        ${report.risk_level}
+                    </span>
+                </td>
+
+                <td>
+                    ${report.risk_score}/100
+                </td>
+
+                <td>
+                    ${report.date}
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        });
+
+}
+
+
+function clearReports() {
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to clear all saved reports?"
+        );
+
+
+    if (confirmDelete) {
+
+        localStorage.removeItem(
+            "mahaSurakshaReports"
+        );
+
+        loadReports();
+
+        alert("All reports have been cleared.");
+
+    }
+
+}
+
+
+loadReports();
+
+</script>
+
+</body>
+
+</html>

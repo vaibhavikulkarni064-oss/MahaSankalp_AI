@@ -1,4 +1,4 @@
-const API_BASE = window.KRUSHIRAKSHAK_API || 'http://127.0.0.1:8000';
+const API_BASE = window.KRUSHIRAKSHAK_API || 'https://krushirakshak-ai-api.onrender.com';
 const $ = (selector, scope=document) => scope.querySelector(selector);
 const $$ = (selector, scope=document) => [...scope.querySelectorAll(selector)];
 let language = 'en';
